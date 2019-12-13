@@ -1,0 +1,105 @@
+@startuml
+
+' skinparam shadowing false
+
+participant "Attestor Account\n(ARDOR-\n1111-1111-1111-11111)" as ATTE
+participant "Claimant Account\n(ARDOR-\n2222-2222-2222-22222)" as CLAI
+participant "New Claimant Account\n(ARDOR-\n3333-3333-3333-33333)" as NCLAI
+
+
+== Precondition ==
+[-> ATTE: set account property
+note right
+    accountProperty: {
+        property: ap://<attestation context>,
+        value: 001|<r or i>|a|0000-0000-0000-00000|<attestor account payload>
+    }
+end note
+
+
+...
+== Claimant Attestation ==
+
+ATTE -> CLAI: set account property
+note right
+    accountProperty: {
+        property: ap://<attestation context>,
+        value: 001|<i or l>|a|0000-0000-0000-00000|<account payload>
+    }
+end note
+|||
+
+
+...
+== Claimant Deactivation ==
+
+ATTE -> CLAI: set account property
+note right
+    accountProperty: {
+        property: ap://<attestation context>,
+        value: 001|<i or l>|i|0000-0000-0000-00000|<account payload>
+    }
+end note
+|||
+
+
+...
+== Claimant Reactivation ==
+
+ATTE -> CLAI: set account property
+note right
+    accountProperty: {
+        property: ap://<attestation context>,
+        value: 001|<i or l>|a|0000-0000-0000-00000|<account payload>
+    }
+end note
+|||
+
+
+...
+== Claimant Payload update ==
+
+ATTE -> CLAI: set account property
+note right
+    accountProperty: {
+        property: ap://<attestation context>,
+        value: 001|<i or l>|a|0000-0000-0000-00000|<new account payload>
+    }
+end note
+|||
+
+
+...
+== Claimant Account Update ==
+
+ATTE -> NCLAI: set account property
+note right
+    accountProperty: {
+        property: ap://<attestation context>,
+        value: 001|<i or l>|a|0000-0000-0000-00000|<new account payload>
+    }
+end note
+
+
+ATTE -> CLAI: update account property
+note right
+    accountProperty: {
+        property: ap://<attestation context>,
+        value: 001|<i or l>|d|3333-3333-3333-33333|<new account payload>
+    }
+end note
+|||
+
+
+...
+== Attestation Revocation ==
+
+alt attestor revocation
+    ATTE -> NCLAI: delete account property
+else self revocation
+    NCLAI -> NCLAI: delete account property
+end
+|||
+
+
+@enduml

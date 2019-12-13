@@ -1,0 +1,72 @@
+@startuml
+
+
+participant "Verifier" as VERI
+participant "Claimant Account" as CLAI
+participant "New Claimant Account" as NCLAI
+participant "Attestor" as ATTE
+
+
+== Precondition ==
+
+-> VERI: received claim
+
+
+...
+== Claim Verification ==
+
+VERI -> VERI: decode token
+VERI -> VERI: check validity of token
+VERI -> VERI: check validity of token\ncreator account
+
+group optional
+    VERI -> VERI: check claim
+end
+|||
+
+
+== Trust Chain Verification ==
+
+VERI -> CLAI: get token creator account\ndata fields
+|||
+
+loop
+    VERI -> VERI: check formal validity of\ndata fields
+
+    group optional
+        VERI -> VERI: check entity
+    end
+
+    alt is claim creator account 
+        VERI -> VERI: check if account state is active
+    else
+        loop as long as account state is deprecated
+            VERI -> NCLAI: get data fields
+            VERI -> VERI: check formal validity of data fields
+            VERI -> VERI: check entity type
+            
+            group optional
+                VERI -> VERI: check entity
+            end
+            
+            VERI -> VERI: treat new claimant as claimant
+        end
+        VERI -> VERI: check if account state is active
+    end
+
+    VERI -> VERI: check if entity type is root
+    alt type is root
+        VERI -> VERI: check if account is known
+        VERI -> VERI: check if property was self set
+        VERI -> VERI: break loop and return success
+    else
+        alt is not claim creator account
+            VERI -> VERI: check if entity type is not leaf
+        end
+    end
+    VERI -> ATTE: get data fields
+    VERI -> VERI: treat attestor as claimant
+end
+|||
+
+@enduml

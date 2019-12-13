@@ -1,0 +1,23 @@
+@startuml
+
+
+participant "Claimant" as CLAI
+participant "Verifier" as VERI
+
+
+CLAI -> CLAI: create claim
+note right
+    claim: {
+        payload: <claim payload>
+        attestationContext: <attestation context>
+        attestationPath: [<attestor accounts up to root>]
+        creatorAccount: <claim creator account>
+        signature: <signature token created by claim creator account>
+    }
+end note
+
+
+...
+CLAI -> VERI: share claim
+
+@enduml

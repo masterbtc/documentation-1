@@ -1,0 +1,7 @@
+{
+    "plantuml.diagramsRoot": "docs/plantUml/src",
+    "plantuml.exportOutDir": "docs/plantUml/out",
+    "editor.autoIndent": false,
+    "editor.tabSize": 4,
+    "markdown.extension.list.indentationSize": "inherit"
+}

@@ -1,0 +1,87 @@
+@startuml
+
+
+participant "Attestor Account\n(ARDOR-\n1111-1111-1111-11111)" as ATTE
+participant "New Attestor Account\n(ARDOR-\n2222-2222-2222-22222)" as NATTE
+
+
+== Self Attestation ==
+
+ATTE -> ATTE: set account property
+note right
+    accountProperty: {
+        property: ap://<attestation context>,
+        value: 001|r|a|0000-0000-0000-00000|<account payload>
+    }
+end note
+|||
+
+
+...
+== Attestor Deactivation ==
+
+ATTE -> ATTE: update account property
+note right
+    accountProperty: {
+        property: myAttestationContext,
+        value: 001|r|i|0000-0000-0000-00000|<account payload>
+    }
+end note
+|||
+
+
+...
+== Attestor Reactivation ==
+
+ATTE -> ATTE: update account property
+note right
+    accountProperty: {
+        property: myAttestationContext,
+        value: 001|r|a|0000-0000-0000-00000|<account payload>
+    }
+end note
+|||
+
+
+...
+== Attestor Payload Update ==
+
+ATTE -> ATTE: update account property
+note right
+    accountProperty: {
+        property: ap://<attestation context>,
+        value: 001|r|a|0000-0000-0000-00000|<new account payload>
+    }
+end note
+
+
+...
+== Attestor Account Update ==
+
+ATTE -> NATTE: set account property
+note right
+    accountProperty: {
+        property: ap://<attestation context>,
+        value: 001|r|a|0000-0000-0000-00000|<new account payload>
+    }
+end note
+
+
+ATTE -> ATTE: update account property
+note right
+    accountProperty: {
+        property: ap://<attestation context>,
+        value: 001|r|d|2222-2222-2222-22222|<new account payload>
+    }
+end note
+|||
+
+
+...
+== Attestation Revocation ==
+
+NATTE -> NATTE: delete account property
+|||
+
+
+@enduml
