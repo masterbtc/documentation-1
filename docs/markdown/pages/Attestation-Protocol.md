@@ -30,9 +30,9 @@ The attestation protocol should be build on top of a blockchain infrastructure t
 
 The following criteria should be fulfilled:
 1. based on asymmetric cryptography
-2. data claiming
+2. data claiming / authenticity verification
 3. create / revoke attestations
-4. attesting claimants
+4. attesting other accounts
 5. different attestation roles
 
 The [Ardor](https://ardorplatform.org) blockchain has been chosen as infrastructure blockchain due to its well fitting [account properties](https://ardordocs.jelurida.com/Account_Properties) feature. It provides the possibility to tag an account with a small amount of data (160 characters).
@@ -43,7 +43,7 @@ A big advantage of the account properties feature is the capability of updating 
 
 The ability to self sovereignly delete account properties can later be used as a kind of emergency switch in case of key theft. The owner of a compromised account can delete ones account property, which then leads to a break in the trust chain and in the end to an unsuccessful verification process.
 
-Even if the Ardor blockchain along with its account properties feature is a well fitting host system, it should be mentioned that the attestation protocol could also be ported to other blockchains. 
+Even if the Ardor blockchain along with its account properties feature is a well fitting host system, it should be mentioned that the attestation protocol could be ported to other blockchains, too. 
 
 
 The attestation protocol itself lives in the tagged data of an account property.
@@ -69,14 +69,14 @@ All other fields are embedded into the 160 character long *value* key/value pair
 
 ### Version
 
-The **Version** field indicates the used version of the attestation protocol. It is a three digit number starting at 001 and needs to be incremented whenever a protocol update was made. The current version number is 001.
+The **Version** field indicates the attestation protocol version. It is a three digit number starting at 001 and needs to be incremented whenever a protocol update was made. The current version number is 001.
 
 
 ### Entity Type
 
 The **Entity Type** character is used to define the type (role) of an entity inside the trust chain. There are three major types:
 
-The **root** entity type is a special attestor type and the trust anchor of a trust chain. It is similar to the [root certificate](https://en.wikipedia.org/wiki/Root_certificate) in a PKI and is allowed to attest itself, intermediates and leaf entities. A verifier in the end needs to trust the root entity of a trust chain to validate it in a positive way. It is the top end of a trust chain.
+The **root** entity type is a special attestor type and the trust anchor of a trust chain. It is similar to the [root certificate](https://en.wikipedia.org/wiki/Root_certificate) in a PKI and is allowed to attest itself, intermediates and leaf entities. A verifier in the end needs to trust the root entity of a trust chain to verify the chain in a positive way. It is the top end of a trust chain.
 
 An **intermediate** is similar to a normal [certificate authority](https://en.wikipedia.org/wiki/Certificate_authority) in a PKI. It is attested by the root or another intermediate account and is able to attest other intermediates and leaf entities. It acts as an intermediate chain link in a trust chain.
 
@@ -112,7 +112,7 @@ A **deprecated** account is an account that was used in the past and the account
 
 A short example: An intermediate account holder attests a leaf account and then moves to another account. The leaf account holder later creates a claim, signs it with its leaf account and shares the claim with a verifier. The verifier then verifies the trust chain starting from the leaf account and moves one level up to the intermediate account. If the intermediate account would have been marked as inactive (because the account holder moved to another account), the trust chain would end here and the verifier would mark the claim as not trustworthy. 
 
-Because the intermediate account is marked as deprecated and the new account is included in the redirect data field, the verifier can now go on and continue verifying the trust chain by following the redirect account up to the root account. With this approach, even multiple account switching wouldn't break the trust chain, because the following account is always included in the redirect data field of the previous account.
+Since the intermediate account is marked as deprecated and the new account is included in the redirect data field, the verifier can go on and continue verifying the trust chain by following the redirect account up to the root account. With this approach, even multiple account switching wouldn't break the trust chain because the next account is always included in the redirect data field of the previous account.
 
 
 The following table shows the state character that are used to represent the state:
@@ -126,7 +126,7 @@ The following table shows the state character that are used to represent the sta
 
 ### Redirect Account
 
-As explained in the state type section, the **Redirect Account** data field is only used in case of a deprecated state. It then points to the account which took over the actual account. To save character space, not the complete Reed Solomon account representation is included in this data field. Only the significant 20 characters without the *ARDOR-* prefix are stored here. To actually use the redirect account, the Reed Solomon representation needs to be reconstructed later on. In case the data field is not used, it has the dummy value of *0000-0000-0000-00000*.
+As explained in the state type section, the **Redirect Account** data field is only used in case of a deprecated state. It then points to the account that took over the actual account. To save character space, not the complete Reed Solomon account representation is included in the data field. Only the significant 20 characters without the *ARDOR-* prefix are stored here. To use the redirect account, the Reed Solomon representation needs to be reconstructed later on. In case the data field is not used, it has the dummy value of *0000-0000-0000-00000*.
 
 
 ### Payload
@@ -158,7 +158,7 @@ To update the account payload, one updates the existing account property with th
 
 For moving to another account, a little more complexity is required. A root account holder first needs to again self attest the new account in the same way as described above and additionally link the old account to the new one. This is done by setting the state type character to 'd', which stands for deprecated, and updating the redirect account to the new self attested account. This link lets the trust chain continue so that it can be successfully parsed in the verification process (see deprecation state description for a more detailed explanation).
 
-To revoke the whole attestation and therefore opt out of the trust chain, one needs to delete ones account property.
+To revoke the whole attestation and therefore opt out from the trust chain, one only needs to delete ones account property.
 
 
 ## Attestation
@@ -169,7 +169,7 @@ To revoke the whole attestation and therefore opt out of the trust chain, one ne
 
 Due to the fact that the self attestation workflow is derived from the attestation workflow, the attestation workflow works in principle the same way as the self attestation workflow. The big difference is the setter account of an account property (which is basically the attestation). Every attestation has to be set by a trustworthy entity of a trust chain with the permission to attest other accounts. A trustworthy entity is an already attested account and the root account.
 
-Because the leaf account is not allowed to attest other accounts, only the root or an already attested intermediate account (attestor) is able to attest other account (claimants).
+Because the leaf account is not allowed to attest other accounts, only the root or an already attested intermediate account (attestor) is able to attest other accounts (claimant).
 
 It should also be mentioned that there is the capability of revoking an attestation self sovereignly.
 
@@ -180,9 +180,9 @@ It should also be mentioned that there is the capability of revoking an attestat
 
 *claim creation overview*
 
-After a trust chain is build, a claimant account holder is able to create verifiable claims. These claims can be verified without needing to participate in a trust chain in any way. Only the root account must be known and trusted.
+After a trust chain is build, a claimant account holder is able to create authenticated claims. The authenticity of these claims can be verified without needing to participate in a trust chain in any way. Only the root account must be known and trusted.
 
-To do so, the claimant account holder creates a signature token based on the following claim properties: a claim payload (which can be data of any kind and length), the attestation context, the attestation path (which is the path from the claimant attestor account up to the root account) and the claimant account itself as creator account. 
+To do so, the claimant account holder creates a signature token based on the following claim properties: a claim payload (which can be data of any kind and length), the attestation context, the attestation path (which is the path from the claimant's attestor account up to the root account) and the claimant account itself as creator account. 
 
 Even though the creatorAccount property isn't necessary needed for verification (because the signature token already includes this information), it should nevertheless be part of a claim object. The reason is human readability. One should be able to see the origin of a claim without the need to actually verify it.
  
