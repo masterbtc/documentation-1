@@ -204,7 +204,7 @@ It should also be mentioned that there is the capability of revoking an attestat
 
 ![](./../../plantuml/out/attestation-protocol/claim-creation-workflow/claim-creation-workflow.svg)
 
-*claim creation overview*
+*data signing overview*
 
 After a trust chain is build, an attested account holder is able to sign data. The authenticity of these data can later be verified without needing to participate in a trust chain in any way. Only the root account must be known and trusted.
 
@@ -217,9 +217,9 @@ Even though the creatorAccount property isn't necessary needed for verification 
 
 ![](./../../plantuml/out/attestation-protocol/protocol-verification-workflow/protocol-verification-workflow.svg)
 
-*claim verification workflow*
+*signed data verification workflow*
 
-Whenever a verifier receives a signed data object, one needs to proceed the following steps successfully to verify the validity of this data.
+Whenever a verifier receives a signed data object, one needs to proceed the following steps successfully to verify the validity of these data.
 
 1. decode the signature token.
 2. verify the validity of that token.
