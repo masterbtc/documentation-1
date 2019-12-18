@@ -14,7 +14,7 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */ 
- 
+
 @startuml
 
 
@@ -22,9 +22,9 @@ participant "Attested Account" as ATTE
 participant "Verifier" as VERI
 
 
-ATTE -> ATTE: create data object
+ATTE -> ATTE: sign data
 note right
-    dataObject: {
+    signedData: {
         payload: <data to be signed>
         attestationContext: <attestation context>
         attestationPath: [<attestor accounts up to root>]
@@ -35,6 +35,6 @@ end note
 
 
 ...
-ATTE -> VERI: share data object
+ATTE -> VERI: share signed data
 
 @enduml

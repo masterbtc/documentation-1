@@ -26,7 +26,7 @@ participant "Attestor" as ATTE
 
 == Precondition ==
 
--> VERI: received data object
+-> VERI: received signed\ndata object
 
 
 ...
@@ -37,7 +37,7 @@ VERI -> VERI: check validity of token
 VERI -> VERI: check validity of token\ncreator account
 
 group optional
-    VERI -> VERI: check data object
+    VERI -> VERI: check signed data
 end
 |||
 
@@ -54,7 +54,7 @@ loop
         VERI -> VERI: check entity
     end
 
-    alt is data object creator account 
+    alt is signed data creator account 
         VERI -> VERI: check if account state is active
     else
         loop as long as account state is deprecated
@@ -77,7 +77,7 @@ loop
         VERI -> VERI: check if property was self set
         VERI -> VERI: break loop and return success
     else
-        alt is not data object creator account
+        alt is not signed data creator account
             VERI -> VERI: check if entity type is not leaf
         end
     end

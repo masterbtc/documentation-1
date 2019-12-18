@@ -33,7 +33,7 @@
         - [Misc](#misc)
     - [Self Attestation](#self-attestation)
     - [Attestation](#attestation)
-    - [Data Object Creation](#data-object-creation)
+    - [Data Signing](#data-signing)
     - [Data Verification](#data-verification)
     - [Future Work](#future-work)
         - [Document Signing](#document-signing)
@@ -200,17 +200,17 @@ Because the leaf account is not allowed to attest other accounts, only the root 
 It should also be mentioned that there is the capability of revoking an attestation self sovereignly.
 
 
-## Data Object Creation
+## Data Signing
 
 ![](./../../plantuml/out/attestation-protocol/claim-creation-workflow/claim-creation-workflow.svg)
 
 *claim creation overview*
 
-After a trust chain is build, an attested account holder is able to sign data. The authenticity of these data can then be verified without needing to participate in a trust chain in any way. Only the root account must be known and trusted.
+After a trust chain is build, an attested account holder is able to sign data. The authenticity of these data can later be verified without needing to participate in a trust chain in any way. Only the root account must be known and trusted.
 
-To do so, the attested account holder creates a signature token based on the following data object properties: a payload (the actual data to be verified), the attestation context, the attestation path (which is the path from the attestor account up to the root account) and the attested account itself as creator account. 
+To do so, the attested account holder creates a signature token based on the signed data object properties: a payload (the actual data to be verified), the attestation context, the attestation path (which is the path from the attestor account up to the root account) and the attested account itself as creator account. 
 
-Even though the creatorAccount property isn't necessary needed for verification (because the signature token already includes this information), it should nevertheless be part of a data object. The reason is human readability. One should be able to see the origin of a data object without needing to actually verify it.
+Even though the creatorAccount property isn't necessary needed for verification (because the signature token already includes this information), it should nevertheless be part of a signed data object. The reason is human readability. One should be able to see the origin of signed data without needing to actually verify it.
  
 
 ## Data Verification
@@ -219,20 +219,20 @@ Even though the creatorAccount property isn't necessary needed for verification 
 
 *claim verification workflow*
 
-Whenever a verifier receives a data object, one needs to proceed the following steps successfully to verify the validity of that data object.
+Whenever a verifier receives a signed data object, one needs to proceed the following steps successfully to verify the validity of this data.
 
 1. decode the signature token.
 2. verify the validity of that token.
-3. check if the signature creator account is the same as the creator account specified inside the data object.
-4. check the data object (optional)
+3. check if the signature creator account is the same as the creator account specified in the signed data.
+4. check the signed data (optional)
 5. collect the data fields of the creator account (based on the attestation context).
 6. check the formal validity of the data fields.
 7. check the attested account data fields (optional)
-8. check if the attested account is the data object creator account
-    1. if it's the data object creator account
+8. check if the attested account is the signed data creator account
+    1. if it's the signed data creator account
         1. check if the attested account is in state active.
         2. continue with 9.
-    2. if it's not the data object creator account
+    2. if it's not the signed data creator account
         1. follow the deprecation path until an attested account is found that is not deprecated.
             1. collect the concatenated data fields of the referenced attested account (based on the attestation context and redirect account).
             2. check the formal validity of the data fields.
@@ -248,10 +248,10 @@ Whenever a verifier receives a data object, one needs to proceed the following s
         2. check if the account property was self set.
         3. stop the verification process successfully.
     2. If its not a root account
-        1. check if the attested account is the data object creator account
-            1. if it's the data object creator account
+        1. check if the attested account is the signed data creator account
+            1. if it's the signed data creator account
                 1. continue with step 10.
-            2. if it's not the data object creator account
+            2. if it's not the signed data creator account
                 1. check if the entity type is not leaf.
                 2. continue with step 10.
 10. collect the data fields from the attestor account.
