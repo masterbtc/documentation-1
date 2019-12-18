@@ -3,8 +3,8 @@
 ' skinparam shadowing false
 
 participant "Attestor Account\n(ARDOR-\n1111-1111-1111-11111)" as ATTE
-participant "Claimant Account\n(ARDOR-\n2222-2222-2222-22222)" as CLAI
-participant "New Claimant Account\n(ARDOR-\n3333-3333-3333-33333)" as NCLAI
+participant "Attested Account\n(ARDOR-\n2222-2222-2222-22222)" as CLAI
+participant "New Attested Account\n(ARDOR-\n3333-3333-3333-33333)" as NCLAI
 
 
 == Precondition ==
@@ -18,7 +18,7 @@ end note
 
 
 ...
-== Claimant Attestation ==
+== Account Attestation ==
 
 ATTE -> CLAI: set account property
 note right
@@ -31,7 +31,7 @@ end note
 
 
 ...
-== Claimant Deactivation ==
+== Account Deactivation ==
 
 ATTE -> CLAI: set account property
 note right
@@ -44,7 +44,7 @@ end note
 
 
 ...
-== Claimant Reactivation ==
+== Account Reactivation ==
 
 ATTE -> CLAI: set account property
 note right
@@ -57,7 +57,7 @@ end note
 
 
 ...
-== Claimant Payload update ==
+== Account Payload Update ==
 
 ATTE -> CLAI: set account property
 note right
@@ -70,7 +70,7 @@ end note
 
 
 ...
-== Claimant Account Update ==
+== Account Update ==
 
 ATTE -> NCLAI: set account property
 note right

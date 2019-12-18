@@ -14,8 +14,8 @@
         - [Misc](#misc)
     - [Self Attestation](#self-attestation)
     - [Attestation](#attestation)
-    - [Claim Creation](#claim-creation)
-    - [Claim Verification](#claim-verification)
+    - [Data Object Creation](#data-object-creation)
+    - [Data Verification](#data-verification)
     - [Future Work](#future-work)
         - [Document Signing](#document-signing)
         - [Entity Ranking](#entity-ranking)
@@ -26,11 +26,13 @@
 
 The following protocol describes a [PKI](https://www.bsi.bund.de/EN/Topics/ElectrIDDocuments/securPKI/pki_node.html) like system where chains of trust (so called trust chains) can be build and managed via blockchain addresses.
 
+After a trust chain is build, authenticated claims can be created by participating users and the authenticity can be verified by third parties.
+
 The attestation protocol should be build on top of a blockchain infrastructure to benefit from an immutable, decentralized and highly redundant history which leads to highly credible and available trust chains.
 
 The following criteria should be fulfilled:
 1. based on asymmetric cryptography
-2. data claiming / authenticity verification
+2. data signing / verification
 3. create / revoke attestations
 4. attesting other accounts
 5. different attestation roles
@@ -169,67 +171,67 @@ To revoke the whole attestation and therefore opt out from the trust chain, one 
 
 Due to the fact that the self attestation workflow is derived from the attestation workflow, the attestation workflow works in principle the same way as the self attestation workflow. The big difference is the setter account of an account property (which is basically the attestation). Every attestation has to be set by a trustworthy entity of a trust chain with the permission to attest other accounts. A trustworthy entity is an already attested account and the root account.
 
-Because the leaf account is not allowed to attest other accounts, only the root or an already attested intermediate account (attestor) is able to attest other accounts (claimant).
+Because the leaf account is not allowed to attest other accounts, only the root or an already attested intermediate account (attestor) is able to attest other accounts (attested account).
 
 It should also be mentioned that there is the capability of revoking an attestation self sovereignly.
 
 
-## Claim Creation
+## Data Object Creation
 
 ![](./../../plantuml/out/attestation-protocol/claim-creation-workflow/claim-creation-workflow.svg)
 
 *claim creation overview*
 
-After a trust chain is build, a claimant account holder is able to create authenticated claims. The authenticity of these claims can be verified without needing to participate in a trust chain in any way. Only the root account must be known and trusted.
+After a trust chain is build, an attested account holder is able to sign data. The authenticity of these data can then be verified without needing to participate in a trust chain in any way. Only the root account must be known and trusted.
 
-To do so, the claimant account holder creates a signature token based on the following claim properties: a claim payload (which can be data of any kind and length), the attestation context, the attestation path (which is the path from the claimant's attestor account up to the root account) and the claimant account itself as creator account. 
+To do so, the attested account holder creates a signature token based on the following data object properties: a payload (the actual data to be verified), the attestation context, the attestation path (which is the path from the attestor account up to the root account) and the attested account itself as creator account. 
 
-Even though the creatorAccount property isn't necessary needed for verification (because the signature token already includes this information), it should nevertheless be part of a claim object. The reason is human readability. One should be able to see the origin of a claim without the need to actually verify it.
+Even though the creatorAccount property isn't necessary needed for verification (because the signature token already includes this information), it should nevertheless be part of a data object. The reason is human readability. One should be able to see the origin of a data object without needing to actually verify it.
  
 
-## Claim Verification
+## Data Verification
 
 ![](./../../plantuml/out/attestation-protocol/protocol-verification-workflow/protocol-verification-workflow.svg)
 
 *claim verification workflow*
 
-Whenever a verifier receives a verification claim, one needs to proceed the following steps successfully to verify the validity of that claim.
+Whenever a verifier receives a data object, one needs to proceed the following steps successfully to verify the validity of that data object.
 
 1. decode the signature token.
 2. verify the validity of that token.
-3. check if the signature creator account is the same as the creator account specified inside the claim object.
-4. check the claim (optional)
+3. check if the signature creator account is the same as the creator account specified inside the data object.
+4. check the data object (optional)
 5. collect the data fields of the creator account (based on the attestation context).
 6. check the formal validity of the data fields.
-7. check the claimant account data fields (optional)
-8. check if the claimant account is the claim creator account
-    1. if it's the claim creator account
-        1. check if the claimant account is in state active.
+7. check the attested account data fields (optional)
+8. check if the attested account is the data object creator account
+    1. if it's the data object creator account
+        1. check if the attested account is in state active.
         2. continue with 9.
-    2. if it's not the claim creator account
-        1. follow the deprecation path until a claimant account is found that is not deprecated.
-            1. collect the concatenated data fields of the referenced claimant (based on the attestation context and redirect account).
+    2. if it's not the data object creator account
+        1. follow the deprecation path until an attested account is found that is not deprecated.
+            1. collect the concatenated data fields of the referenced attested account (based on the attestation context and redirect account).
             2. check the formal validity of the data fields.
             3. check if the redirect account has the same entity type as the origin account
-            4. check the referenced claimant account data fields (optional)
-            5. treat the referenced claimant as claimant
+            4. check the referenced attested account data fields (optional)
+            5. treat the referenced attested account as attested account
             6. continue with step 8.2.1.
-        2. check if the claimant account is in state active. 
+        2. check if the attested account is in state active. 
         3. continue with 9.
-9. check the entity type of the claimant account.
+9. check the entity type of the attested account.
     1. If it is a root account
         1. decide if its trustworthy and known.
         2. check if the account property was self set.
         3. stop the verification process successfully.
     2. If its not a root account
-        1. check if the claimant account is the claim creator account
-            1. if it's the claim creator account
+        1. check if the attested account is the data object creator account
+            1. if it's the data object creator account
                 1. continue with step 10.
-            2. if it's not the claim creator account
+            2. if it's not the data object creator account
                 1. check if the entity type is not leaf.
                 2. continue with step 10.
 10. collect the data fields from the attestor account.
-11. treat attestor as claimant.
+11. treat attestor as attested account.
 12. continue with step 6.
 
 
@@ -242,7 +244,7 @@ The Attestation Protocol needs to be adapted / expanded to verify documents atte
 
 It is not relevant for a login or authentication system, because the verifier checks the time span between token creation and current time. If this time span is to big, one would validate the token creation as false and therefore stop the verification process.
 
-To solve this issue, a trustworthy entity or the verifier itself would need to additionally sign the token created by a claimant or create and sign the timestamp itself. This signature would then fix the timestamp and a change would break the signature and lead to an error in the verification process.
+To solve this issue, a trustworthy entity or the verifier itself would need to additionally sign the token created by an attested account or create and sign the timestamp itself. This signature would then fix the timestamp and a change would break the signature and lead to an error in the verification process.
 
 
 ### Entity Ranking

@@ -18,7 +18,7 @@ end note
 
 
 ...
-== Attestor Deactivation ==
+== Account Deactivation ==
 
 ATTE -> ATTE: update account property
 note right
@@ -31,7 +31,7 @@ end note
 
 
 ...
-== Attestor Reactivation ==
+== Account Reactivation ==
 
 ATTE -> ATTE: update account property
 note right
@@ -44,7 +44,7 @@ end note
 
 
 ...
-== Attestor Payload Update ==
+== Account Payload Update ==
 
 ATTE -> ATTE: update account property
 note right
@@ -56,7 +56,7 @@ end note
 
 
 ...
-== Attestor Account Update ==
+== Account Update ==
 
 ATTE -> NATTE: set account property
 note right

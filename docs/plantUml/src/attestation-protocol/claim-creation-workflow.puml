@@ -1,23 +1,23 @@
 @startuml
 
 
-participant "Claimant" as CLAI
+participant "Attested Account" as ATTE
 participant "Verifier" as VERI
 
 
-CLAI -> CLAI: create claim
+ATTE -> ATTE: create data object
 note right
-    claim: {
-        payload: <claim payload>
+    dataObject: {
+        payload: <data to be signed>
         attestationContext: <attestation context>
         attestationPath: [<attestor accounts up to root>]
-        creatorAccount: <claim creator account>
-        signature: <signature token created by claim creator account>
+        creatorAccount: <data object creator account>
+        signature: <signature token created by data object creator account>
     }
 end note
 
 
 ...
-CLAI -> VERI: share claim
+ATTE -> VERI: share data object
 
 @enduml
