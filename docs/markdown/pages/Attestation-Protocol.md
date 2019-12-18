@@ -17,36 +17,35 @@
  */ 
  -->
 
-# Attestation Protocol
+# Table of Contents
+- [Table of Contents](#table-of-contents)
+- [Protocol Version](#protocol-version)
+- [Introduction](#introduction)
+- [Protocol Data Fields](#protocol-data-fields)
+    - [Attestation Context](#attestation-context)
+    - [Data Field Concatenation](#data-field-concatenation)
+    - [Version](#version)
+    - [Entity Type](#entity-type)
+    - [State](#state)
+    - [Redirect Account](#redirect-account)
+    - [Payload](#payload)
+    - [Misc](#misc)
+- [Self Attestation](#self-attestation)
+- [Attestation](#attestation)
+- [Data Signing](#data-signing)
+- [Data Verification](#data-verification)
+- [Future Work](#future-work)
+    - [Document Signing](#document-signing)
+    - [Entity Ranking](#entity-ranking)
+    - [Validity Timeout](#validity-timeout)
 
-- [Attestation Protocol](#attestation-protocol)
-    - [Protocol Version](#protocol-version)
-    - [Introduction](#introduction)
-    - [Protocol Data Fields](#protocol-data-fields)
-        - [Attestation Context](#attestation-context)
-        - [Data Field Concatenation](#data-field-concatenation)
-        - [Version](#version)
-        - [Entity Type](#entity-type)
-        - [State](#state)
-        - [Redirect Account](#redirect-account)
-        - [Payload](#payload)
-        - [Misc](#misc)
-    - [Self Attestation](#self-attestation)
-    - [Attestation](#attestation)
-    - [Data Signing](#data-signing)
-    - [Data Verification](#data-verification)
-    - [Future Work](#future-work)
-        - [Document Signing](#document-signing)
-        - [Entity Ranking](#entity-ranking)
-        - [Validity Timeout](#validity-timeout)
 
-
-## Protocol Version
+# Protocol Version
 
 current version: 1.0.0
 
 
-## Introduction
+# Introduction
 
 The following protocol describes a [PKI](https://www.bsi.bund.de/EN/Topics/ElectrIDDocuments/securPKI/pki_node.html) like system where chains of trust (so called trust chains) can be build and managed via blockchain addresses.
 
@@ -75,17 +74,17 @@ Even if the Ardor blockchain along with its account properties feature is a well
 The attestation protocol itself lives in the tagged data of an account property.
 
 
-## Protocol Data Fields
+# Protocol Data Fields
 
 Due to the fact that the attestation protocol is embedded into the account property feature, most of its data fields are embedded into the *value* key/value pair of an account property. In Ardor, an account property is represented as a JSON object with at least a *property* and  a *value* key/value pair. 
 
 
-### Attestation Context
+## Attestation Context
 
 The only data field that is not embedded into the *value* property, used to distinguish the context of an attested trust chain, is the **Attestation Context**. It represents the value of the *property* key/value pair and is used to enable the possibility of attaching multiple trust chains to one account. To indicate that a property is part of the attestation protocol, the property value should start with the identifier *ap://*.
 
 
-### Data Field Concatenation
+## Data Field Concatenation
 
 All other fields are embedded into the 160 character long *value* key/value pair. They consists of one or more characters concatenated in a defined order and separated by a pipe character ( | ).
 
@@ -93,12 +92,12 @@ All other fields are embedded into the 160 character long *value* key/value pair
 
 *character arrangement of attestation protocols data fields*
 
-### Version
+## Version
 
 The **Version** field indicates the attestation protocol version. It is a three digit number starting at 001 and needs to be incremented whenever a protocol update was made. The current version number is 001.
 
 
-### Entity Type
+## Entity Type
 
 The **Entity Type** character is used to define the type (role) of an entity inside the trust chain. There are three major types:
 
@@ -126,7 +125,7 @@ The following table shows the entity type character that are used to represent t
 *entity type character table*
 
 
-### State
+## State
 
 The **State** data field indicates the current state of an account. There are three state types:
 
@@ -150,19 +149,19 @@ The following table shows the state character that are used to represent the sta
 | deprecated |           d          | Account is invalid, but a new account was created and is referenced |
 
 
-### Redirect Account
+## Redirect Account
 
 As explained in the state type section, the **Redirect Account** data field is only used in case of a deprecated state. It then points to the account that took over the actual account. To save character space, not the complete Reed Solomon account representation is included in the data field. Only the significant 20 characters without the *ARDOR-* prefix are stored here. To use the redirect account, the Reed Solomon representation needs to be reconstructed later on. In case the data field is not used, it has the dummy value of *0000-0000-0000-00000*.
 
 
-### Payload
+## Payload
 
 The **Payload** is a free text field with a length of 120 characters. In most cases it should be filled with information related to the property account holder and / or hashes representing the fingerprint of those data.
 
 In case 120 characters are not enough, one could create another transaction including the required data and store the transaction hash in the payload field. With this approach, the data are immutable linked to the account, too.
 
 
-### Misc
+## Misc
 
 It should be mentioned that not all 160 characters are used within the protocol. Only 149 characters are used: 3 (version) + 1 (entity type) + 1 (state type) + 20 (redirect account) + 120 (payload) + 4 (delimiter). 11 characters are reserved for future protocol extensions.
 
@@ -170,7 +169,7 @@ It should be mentioned that not all 160 characters are used within the protocol.
 The next sections describe the workflows to create, attest, update, delete and verify accounts.
 
 
-## Self Attestation
+# Self Attestation
 
 ![](./../../plantuml/out/attestation-protocol/protocol-self-attestation-workflow/protocol-self-attestation-workflow.svg)
 
@@ -187,7 +186,7 @@ For moving to another account, a little more complexity is required. A root acco
 To revoke the whole attestation and therefore opt out from the trust chain, one only needs to delete ones account property.
 
 
-## Attestation
+# Attestation
 
 ![](./../../plantuml/out/attestation-protocol/protocol-attestation-workflow/protocol-attestation-workflow.svg)
 
@@ -200,7 +199,7 @@ Because the leaf account is not allowed to attest other accounts, only the root 
 It should also be mentioned that there is the capability of revoking an attestation self sovereignly.
 
 
-## Data Signing
+# Data Signing
 
 ![](./../../plantuml/out/attestation-protocol/claim-creation-workflow/claim-creation-workflow.svg)
 
@@ -213,7 +212,7 @@ To do so, the attested account holder creates a signature token based on the sig
 Even though the creatorAccount property isn't necessary needed for verification (because the signature token already includes this information), it should nevertheless be part of a signed data object. The reason is human readability. One should be able to see the origin of signed data without needing to actually verify it.
  
 
-## Data Verification
+# Data Verification
 
 ![](./../../plantuml/out/attestation-protocol/protocol-verification-workflow/protocol-verification-workflow.svg)
 
@@ -259,10 +258,10 @@ Whenever a verifier receives a signed data object, one needs to proceed the foll
 12. continue with step 6.
 
 
-## Future Work
+# Future Work
 
 
-### Document Signing
+## Document Signing
 
 The Attestation Protocol needs to be adapted / expanded to verify documents attested in the past. The problem is the timestamp of the document signature (the token). Because the user self creates the token, one could fake the timestamp and therefore fake the token creation time. If for example a leaf account was active from time x to y, the owner of that account could sign a document after time y and fake the timestamp to be between x and y. This is not detectable.
 
@@ -271,7 +270,7 @@ It is not relevant for a login or authentication system, because the verifier ch
 To solve this issue, a trustworthy entity or the verifier itself would need to additionally sign the token created by an attested account or create and sign the timestamp itself. This signature would then fix the timestamp and a change would break the signature and lead to an error in the verification process.
 
 
-### Entity Ranking
+## Entity Ranking
 
 The three entity types could be expand with subtypes to rank entities trustworthiness. For example, a governmental intermediate entity has a higher reputation than a well known registered company. The company itself is trustworthier than a just founded startup. This could be represented in a rating system that lives inside the entity type data field.
 
@@ -280,6 +279,6 @@ The entity type representing character range could be expand to multiple subtype
 The intermediate type characters could be i, j and k where i indicates an A rated entity, j represents a B rated entity and k a low rated C entity. With this system, the verifier could decide if it trusts a C rated startup, a well known company or only governmental backed entities.
 
 
-### Validity Timeout
+## Validity Timeout
 
 Another data field type could be added to define an attestation time span after which an attestation loses its validity. 
