@@ -201,7 +201,7 @@ It should also be mentioned that there is the capability of revoking an attestat
 
 # Data Signing
 
-![](./../../plantuml/out/attestation-protocol/claim-creation-workflow/claim-creation-workflow.svg)
+![](./../../plantuml/out/attestation-protocol/data-signing-workflow/data-signing-workflow.svg)
 
 *data signing overview*
 
