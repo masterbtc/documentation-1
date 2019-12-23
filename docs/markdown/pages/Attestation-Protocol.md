@@ -49,26 +49,26 @@ current version: 1.0.0
 
 The following protocol describes a [PKI](https://www.bsi.bund.de/EN/Topics/ElectrIDDocuments/securPKI/pki_node.html) like system where chains of trust (so called trust chains) can be build and managed via blockchain addresses.
 
-After a trust chain is build, authenticated claims can be created by participating users and the authenticity can be verified by third parties.
+After a trust chain is build, users are able to sign verifiable data sets. These data can later be verified in terms of integrity and authenticity (it is not necessarily possible to determine the identity of an address holder, but verify that one is trusted by a trusted entity). A verification can be done by third parties without needing to participate in a trust chain in any way.
 
-The attestation protocol should be build on top of a blockchain infrastructure to benefit from an immutable, decentralized and highly redundant history which leads to highly credible and available trust chains.
+The Attestation Protocol should be build on top of a blockchain infrastructure to benefit from an immutable, decentralized and highly redundant history which leads to highly credible and accessible trust chains.
 
 The following criteria should be fulfilled:
 1. based on asymmetric cryptography
 2. data signing / verification
 3. create / revoke attestations
-4. attesting other accounts
+4. attesting accounts
 5. different attestation roles
 
 The [Ardor](https://ardorplatform.org) blockchain has been chosen as infrastructure blockchain due to its well fitting [account properties](https://ardordocs.jelurida.com/Account_Properties) feature. It provides the possibility to tag an account with a small amount of data (160 characters).
 
 In Ardor, the public available blockchain addresses are transformed to [Reed Solomon](https://ardordocs.jelurida.com/RS_Address_Format) human readable strings and represented as accounts.
 
-A big advantage of the account properties feature is the capability of updating and deleting an account property (without losing the history) along to the fact that only the setter and receiver of such a property is able to manipulate (update) it. If the setter and receiver differs, the receiver is only allowed to delete its account property.
+A big advantage of the account properties feature is the capability of updating and deleting an account property (without losing its history) along to the fact that only the setter and receiver of such a property is able to manipulate (update) it. If the setter and receiver differs, the receiver is only allowed to delete its account property.
 
 The ability to self sovereignly delete account properties can later be used as a kind of emergency switch in case of key theft. The owner of a compromised account can delete ones account property, which then leads to a break in the trust chain and in the end to an unsuccessful verification process.
 
-Even if the Ardor blockchain along with its account properties feature is a well fitting host system, it should be mentioned that the attestation protocol could be ported to other blockchains, too. 
+<!-- Even if the Ardor blockchain along with its account properties feature is a well fitting host system, it should be mentioned that the attestation protocol could be ported to other blockchains, too.  -->
 
 
 The attestation protocol itself lives in the tagged data of an account property.
@@ -263,7 +263,7 @@ Whenever a verifier receives a signed data object, one needs to proceed the foll
 
 ## Document Signing
 
-The Attestation Protocol needs to be adapted / expanded to verify documents attested in the past. The problem is the timestamp of the document signature (the token). Because the user self creates the token, one could fake the timestamp and therefore fake the token creation time. If for example a leaf account was active from time x to y, the owner of that account could sign a document after time y and fake the timestamp to be between x and y. This is not detectable.
+An extensions could be implemented to verify previous signed documents. The problem is the timestamp of the document signature (the token). Because the user self creates the token, one could fake the timestamp and therefore fake the token creation time. If for example a leaf account was active from time x to y, the owner of that account could sign a document after time y and fake the timestamp to be between x and y. This is not detectable.
 
 It is not relevant for a login or authentication system, because the verifier checks the time span between token creation and current time. If this time span is to big, one would validate the token creation as false and therefore stop the verification process.
 
