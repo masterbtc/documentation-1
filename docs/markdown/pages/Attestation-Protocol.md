@@ -18,6 +18,7 @@
  -->
 
 # Table of Contents
+
 - [Table of Contents](#table-of-contents)
 - [Protocol Version](#protocol-version)
 - [Introduction](#introduction)
@@ -34,6 +35,7 @@
 - [Attestation](#attestation)
 - [Data Signing](#data-signing)
 - [Data Verification](#data-verification)
+- [Expandability](#expandability)
 - [Future Work](#future-work)
     - [Document Signing](#document-signing)
     - [Entity Ranking](#entity-ranking)
@@ -256,6 +258,16 @@ Whenever a verifier receives a signed data object, one needs to proceed the foll
 10. collect the data fields from the attestor account.
 11. treat attestor as attested account.
 12. continue with step 6.
+
+
+# Expandability
+
+Because the payloads of attestations and signed data objects can be data of any kind, extensions could be build on top of the Attestation Protocol that live inside these payloads and extend the functionality of the protocol.
+
+
+![](./../../draw.io/out/diagrams-layers-overview.svg)
+
+*layers overview*
 
 
 # Future Work
