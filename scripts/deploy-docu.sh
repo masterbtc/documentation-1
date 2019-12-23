@@ -20,8 +20,8 @@
 # CONFIGURATION
 ###################################################################################################
 
-DOCU_PROJECT_PATH="git@github.com:somedotone"
-DOCU_WIKI_NAME="attestation-protocol.wiki"
+DOCU_PROJECT_PATH="git@github.com:project-ap"
+DOCU_WIKI_NAME="documentation.wiki"
 
 PREPARED_DOCU_FOLDER="./../prepared-docu"
 
