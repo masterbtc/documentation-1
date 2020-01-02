@@ -1,0 +1,75 @@
+/*
+ *  Copyright (C) 2020  Attila Aldemir <a_aldemir@hotmail.de>
+ *
+ *  This program is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */ 
+
+@startuml
+
+
+participant "Authority" as AUTH
+participant "Entity" as ENTI
+participant "Verifier" as VERI
+
+
+== Precondition ==
+
+-> AUTH: attested via\nAttestation Protocol
+...
+
+
+== Claim Registration ==
+
+AUTH -> AUTH: collect claim user data
+AUTH -> AUTH: add nonce to each user data
+AUTH -> AUTH: create root hash
+AUTH -> ENTI: attest root hash via\nattestation payload in\nAttestation Protocol\nattestation
+AUTH -> ENTI: share collected claim user data
+...
+
+
+== Verifiable Claim Creation ==
+
+ENTI -> ENTI: select user data to claim
+ENTI -> ENTI: create claim based\non selected user data
+ENTI -> ENTI: sign claim with\nAttestation Protocol\ndata signing
+...
+
+
+== Claim Verification ==
+
+ENTI -> VERI: share signed claim
+VERI -> VERI: verify signed claim with\nAttestation Protocol\ndata verification
+activate VERI
+VERI -> VERI: check signed data
+activate VERI
+VERI -> VERI: verify claim
+activate VERI
+deactivate VERI
+deactivate VERI
+deactivate VERI
+
+VERI -> VERI: verify entity with\nAttestation Protocol\ntrust chain verification
+activate VERI
+VERI -> VERI: check entity
+activate VERI
+VERI -> VERI: check if entity attestation\npayload contains root hash
+activate VERI
+deactivate VERI
+deactivate VERI
+deactivate VERI
+
+
+
+@enduml

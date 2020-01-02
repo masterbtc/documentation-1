@@ -34,7 +34,7 @@
 - [Self Attestation](#self-attestation)
 - [Attestation](#attestation)
 - [Data Signing](#data-signing)
-- [Data Verification](#data-verification)
+- [Verification](#verification)
 - [Expandability](#expandability)
 - [Future Work](#future-work)
     - [Document Signing](#document-signing)
@@ -214,11 +214,11 @@ To do so, the attested account holder creates a signature token based on the sig
 Even though the creatorAccount property isn't necessary needed for verification (because the signature token already includes this information), it should nevertheless be part of a signed data object. The reason is human readability. One should be able to see the origin of signed data without needing to actually verify it.
  
 
-# Data Verification
+# Verification
 
 ![](./../../plantuml/out/attestation-protocol/protocol-verification-workflow/protocol-verification-workflow.svg)
 
-*signed data verification workflow*
+*verification workflow*
 
 Whenever a verifier receives a signed data object, one needs to proceed the following steps successfully to verify the validity of these data.
 
