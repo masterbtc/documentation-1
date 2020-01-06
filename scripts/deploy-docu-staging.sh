@@ -21,7 +21,7 @@
 ###################################################################################################
 
 DOCU_PROJECT_PATH="git@github.com:atz3n"
-DOCU_WIKI_NAME="cobba-docu-staging.wiki"
+DOCU_WIKI_NAME="blobaa-docu-staging.wiki"
 
 PREPARED_DOCU_FOLDER="./../prepared-docu"
 

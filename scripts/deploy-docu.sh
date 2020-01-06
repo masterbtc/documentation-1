@@ -20,7 +20,7 @@
 # CONFIGURATION
 ###################################################################################################
 
-DOCU_PROJECT_PATH="git@github.com:project-ap"
+DOCU_PROJECT_PATH="git@github.com:blobaa"
 DOCU_WIKI_NAME="documentation.wiki"
 
 PREPARED_DOCU_FOLDER="./../prepared-docu"
