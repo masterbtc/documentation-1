@@ -6,16 +6,13 @@
         - [UserData](#userdata)
         - [Hashes](#hashes)
     - [Authentication Workflows](#authentication-workflows)
-    - [Possible Use Cases](#possible-use-cases)
 
 
 ## Introduction
 
-The Claim module in combination with the Attestation Protocol enables the possibility to create [verifiable claims](https://docs.microsoft.com/en-us/previous-versions/msp-n-p/ff359101(v=pandp.10)?redirectedfrom=MSDN), backed by trusted authorities, and therefore to fully authenticate an entity to a third party. 
+The Claim module, in conjunction with the Attestation Protocol, enables the possibility to create [verifiable claims](https://docs.microsoft.com/en-us/previous-versions/msp-n-p/ff359101(v=pandp.10)?redirectedfrom=MSDN), backed by trusted authorities, to fully authenticate an entity to a third party. To do so, a trusted authority signs and stores a fingerprint (hash) of an entity related data set on the blockchain. A verifier can later use this fingerprint to verify the integrity and authenticity of a self-created authentication claim received in an authentication request. A key benefit of only storing the fingerprint instead of the full data set is privacy protection. This approach lets an entity share pieces of attested user data in a way that a verify can validate these pieces without needing to know the full data set.
 
-To protect privacy and shrink the size of attached data, the attached entity data aren't stored in clear text. Only the fingerprint (hash) of a data set is public available and stored on the blockchain. This lets an entity share pieces of attested user data in a way that the verify is able to validate these pieces without knowing the whole data set.
-
-A claim based authentication system could be build based on these two modules.
+A claim based authentication system could be built on top of these two modules.
 
 
 ## Claim Elements
@@ -52,20 +49,20 @@ The userData array contains the clear text user data. Each user data is bundled 
 
 *user data object properties*
 
-the **name** property contains the name of an user data. It can be a string of any kind. The **value** property contains the actual user data. The **nonce** is needed for unique leaf hash generation.
+the **name** property contains the name of a user data. It can be a string of any kind. The **value** property contains the actual user data. The **nonce** is needed for unique leaf hash generation.
 
 
 ### Hashes
 
-As described above, an entity/user should be able to create a claim with a subset of one's user data. To achieve this, a [hash tree](https://en.wikipedia.org/wiki/Merkle_tree) based on the user data is created an added to the claim.
+As described above, an entity/user should be able to create a claim with a subset of one's user data. To achieve this, a [hash tree](https://en.wikipedia.org/wiki/Merkle_tree) based on the user data is created and added to the claim.
 
-To prevent an attacker from recreating the root hash based on collected data, every user data is appended with a unique nonce. This leads to different merkle roots even if two user data contain the same name and value.
+To prevent an attacker from recreating the root hash based on collected data, every user data is appended with a unique nonce. This leads to different root hashes even if two user data contain the same name and value.
 
 A flat tree structure with an order of n and a depth of 2 should be used:
 
 ![](./.../../draw.io/out/diagrams-merkle-tree.svg)
 
-*merkle tree based on user data with order n and depth 2*
+*hash tree based on user data with order n and depth 2*
 
 Whenever an entity wants to authenticate itself, it shares the requested user data subset in clear text along with the necessary hashes to recreate the hash tree. A verifier then recreates the hash tree and compares the root hashes to verify the integrity of the shared data.
 
@@ -78,9 +75,9 @@ The hashes object bundles the necessary hashes to recreate the hash tree.
 
 *hashes object properties*
 
-The **leafHash** property holds the leaf hashes needed to recreate the root hash. A leaf hash is only included if the corresponding user data is not included in the user data array.
+The **leafHash** property holds the leaf hashes needed to recreate the root hash. A leaf hash is only included if the corresponding user data is not part of the user data array.
 
-To gain consistency at the leaf hash creation process, every property of a user data object is first sorted alphanumeric based on the property key. The value of these properties are then concatenated to one utf8 string and finally hashed with the sha256 hash-function.
+To gain consistency  every property of a user data object is first sorted alphanumeric based on the property key. The values of these properties are then concatenated to a utf8 string and finally hashed with the sha256 hash function.
 
 ````typescript
 /* User data object */
@@ -91,7 +88,7 @@ To gain consistency at the leaf hash creation process, every property of a user 
 }
 
 
-/* 1. Sort keys alphanumeric */
+/* 1. Sort keys alphanumerically */
 {
     name: 'user-data-name',
     nonce: 'EnYg7EpDzOSPJM3QVfi0DtKmgwiYX4slAv5zNPmenSXiM5PSPAz03PfNI5C1XEDV'
@@ -108,7 +105,7 @@ To gain consistency at the leaf hash creation process, every property of a user 
 ````
 
 
-The **root hash** property holds the claim representing root hash of the hash tree. It is also generated in a consistency way. After all leaf hashes are available, these hashes will be, similar to the leaf hash creation, first alphanumerically sorted and then concatenated. The resulting concatenation string is finally hashed (sha256) and the resulting hash string represents the root hash.
+The **root hash** property holds the claim representing root hash. It is also generated in a consistency way. After all leaf hashes are available, these hashes will be first, similar to the leaf hash creation, alphanumerically sorted and then concatenated. The resulting concatenation string is then hashed (sha256) and the resulting hash string represents the root hash.
 
 ````typescript
 /* Leaf hash array */
@@ -120,7 +117,7 @@ The **root hash** property holds the claim representing root hash of the hash tr
 ]
 
 
-/* 1. Sort leaf hashes alphanumeric */
+/* 1. Sort leaf hashes alphanumerically */
 [
     'e665592df0614a0c6d837145b94887ed80d450a365a46e93cfed00fca91ac54d',
     '2062f74d687e4d8498116de9ea9a63f89b2b98b5442989c474088d27da618300',
@@ -140,28 +137,19 @@ The **root hash** property holds the claim representing root hash of the hash tr
 
 ## Authentication Workflows
 
-An authentication system would have the three following workflows to register, create and verify a verifiable claim.
+There are three major steps for a claim based authentication mechanism: claim registration, claim creation and claim verification.
 
 ![](./../plantUml/out/claim/../../../../plantUml/out/claim/claim-authentication-workflow/claim-authentication-workflow.svg)
 
 *claim authentication workflows*
 
 
-There are three major steps for a claim based authentication mechanism: claim registration, claim creation and claim verification.
+The claim **registration process** registers a claim to an account in the way that an attestor attests an account with the claims root hash as payload. This ensures that a claim is created and / or verified by a trusted entity.
 
-The claim **registration process** register a claim to an account in the way that an attestor attests an account with the claims root hash as payload. This ensures that a claim is created and / or verified by a trusted entity.
+An attested account holder can then **create** verifiable **claims** self sovereignly. To do so, one selects the necessary claim user data, creates the claim and signs it in the way described in the Attestation Protocol. The resulting data set (containing the previously created claim as payload) is a verifiable claim and ready to be shared with a verifier.
 
-An attested account holder can then **create** verifiable **claims** self sovereignly. One can decide which subset of registered claim user data one wants to share and a verifier can later verify the authenticity of this subset without knowing the whole registered claim data. To do so, one selects the user data to claim, creates the claim and signs it in the way described in the Attestation Protocol, where the payload contains the previous created claim.
+To **verify** a verifiable **claim**, one needs to follow the Attestation Protocol verification process with two additionally verification steps. 
 
-The verifier then is able to **verify** the **claim** against the self created root hash (based on the claim user data and hashes) and the root hash attached to the claim creator account. If these hashes match, The same verification process comes into place as described in the Attestation Protocol. If the verification process succeed, the verifier can be sure that the claim is indeed signed by the claim creator account, the claim data are valid and attested by a trustworthy entity.
+The first step is to verify the integrity of a claim. At the point of signed data checking, one needs to extract the previously created claim embedded into the singed data payload, recreate the root hash (based on the claim user data and hashes) and compare it with the claims rootHash value.
 
-
-## Possible Use Cases
-
-Because such an identifier, in the end, is an ordinary [asymmetric key pair](https://en.wikipedia.org/wiki/Public-key_cryptography), an entity can do all the things an asymmetric key pair provides, like encrypting messages, signing documents or authentication. 
-
-- An entity could for example create its **own PKI** with the identifier acting as a root certificate and then has a system where even the trust root can be verified and validated.
-
-- One could **sign documents** for ones customer where a third party can validate and verify that these documents are signed by this specific user.
-
-- A **login system**, similar to [Facebook](https://developers.facebook.com/docs/facebook-login/) or [Google](https://developers.google.com/identity/sign-in/web/sign-in) Login could be developed where an entity can easily login with its identifier without revealing its private data and relying on a centralized infrastructure.
+The second step needs to be embedded into the entity check process. One simply checks if the claim creator account contains the self-created root hash as payload, which proves that the claim is attested by an attestor account. If the Attestation Protocol verification process finally succeed, the verifier can be sure that the claim is indeed signed by the claim creator account, the claim data are valid and attested by an entity which is itself attested by a trustworthy entity.
