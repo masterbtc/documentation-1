@@ -35,10 +35,6 @@
 - [Attestation](#attestation)
 - [Data Signing](#data-signing)
 - [Verification](#verification)
-- [Future Work](#future-work)
-    - [Document Signing](#document-signing)
-    - [Entity Ranking](#entity-ranking)
-    - [Validity Timeout](#validity-timeout)
 
 
 # Protocol Version
@@ -261,28 +257,3 @@ Because the payloads of attestations and signed data objects can be data of any 
 ![](./../../draw.io/out/diagrams-layers-overview.svg)
 
 *layers overview* -->
-
-
-# Future Work
-
-## Document Signing
-
-An extension could be implemented to verify previously signed documents. The problem is the timestamp of the document signature (the token). Because a user self creates this token, one could fake the timestamp and, therefore, fake the token creation time. If, for example, a leaf account was active from time x to y, the owner of that account could sign a document after time y and create a token with a timestamp between x and y. This is not detectable.
-
-It is not relevant for a login or authentication system since the verifier checks the time between token creation and the current time. If this period is too significant, one would validate the token creation as false and therefore stop the verification process.
-
-To solve this issue, a trustworthy entity or the verifier itself would need to additionally sign the token created by an attested account or create and sign the timestamp itself. This signature would then fix the timestamp, and a change would break the signature and lead to an error in the verification process.
-
-
-## Entity Ranking
-
-The three entity types could be expanded with subtypes to rank entities' trustworthiness. For example, an intermediate entity representing a governmental institution has a higher reputation than a well known registered company. The company itself is more trustworthy than a just founded startup. This relationship could be represented in a rating system that lives inside the entity type data field.
-
-The entity type representing character range could be expanded to multiple subtypes per entity type in the following way:
-
-The intermediate type characters could be i, j, and k, where i indicates an A-rated entity, j represents a B-rated entity, and k a low rated C entity. With this system, the verifier could decide if it trusts a C rated startup, a well-known company, or only governmental-backed entities.
-
-
-## Validity Timeout
-
-Another data field type could be added to define an attestation period, after which an attestation loses its validity, similar to a certificate expiration date of a PKI Certificate.
