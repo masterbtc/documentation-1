@@ -29,7 +29,11 @@
 
 ## Introduction
 
-The Claim module, in conjunction with the Attestation Protocol, enables the possibility to create [verifiable claims](https://docs.microsoft.com/en-us/previous-versions/msp-n-p/ff359101(v=pandp.10)?redirectedfrom=MSDN), backed by trusted authorities, to authenticate an entity to a third party. To do so, a trusted authority signs and stores a fingerprint (hash) of an entity related data set on the blockchain. A verifier can later use this fingerprint to verify the integrity and authenticity of a self-created authentication claim received in an authentication request. A key benefit of only storing the fingerprint instead of the full data set is privacy protection. This approach lets an entity share pieces of attested user data in a way that a verify can validate these pieces without needing to know the full data set.
+The Claim module, in conjunction with the Attestation Protocol, enables the possibility to create [verifiable claims](https://docs.microsoft.com/en-us/previous-versions/msp-n-p/ff359101(v=pandp.10)?redirectedfrom=MSDN). These claims are backed by trusted authorities and can be used to authenticate an entity to a third party.
+
+A trusted authority signs and stores a fingerprint (hash) of an entity related data set on the blockchain. A verifier can later use this fingerprint to verify the integrity and authenticity of a self-created authentication claim received in an authentication request. 
+
+A key benefit of only storing the fingerprint instead of the full data set is privacy protection. This approach lets an entity share pieces of attested user data in a way that a verify can validate these pieces without needing to know the full data set.
 
 A claim based authentication system could be built on top of these two modules.
 
@@ -124,7 +128,7 @@ To gain consistency, each property of a user data object is first sorted alphanu
 ````
 
 
-The **root hash** property holds the claim representing root hash. It is the result of a hash (sha256) generation based on all leaf hashes. To gain consistency, all leaf hashes are alphanumerically sorted and concatenated beforehand, too. The resulting utf8 string is then used for the root hash generation.
+The **root hash** property holds the claim representing root hash. It is the result of a hash generation (sha256) based on all leaf hashes. To gain consistency, all leaf hashes are alphanumerically sorted and concatenated beforehand, too. The resulting utf8 string is then used for the root hash generation.
 
 ````typescript
 /* Leaf hash array */
@@ -165,10 +169,10 @@ There are three major steps for a claim based authentication mechanism: claim re
 
 The claim **registration process** registers a claim to an account. To do so, an attestor attests an account with a claim's root hash as payload. This mechanism ensures that a claim is verified by a trusted entity.
 
-An attested account holder can then **create** verifiable **claims** self sovereignly. To do so, one selects the necessary claim user data, creates the claim, and signs it in the way described in the Attestation Protocol. The resulting data set (containing the previously created claim as payload) is a verifiable claim and ready to be shared with a verifier.
+An attested account holder can then **create** verifiable **claims** self sovereignly. To do so, one selects the necessary claim user data, creates the claim, and signs it in the way described in the Attestation Protocol. The resulting data set (containing the claim as payload) is a verifiable claim and ready to be shared with a verifier.
 
 To **verify** a verifiable **claim**, one needs to follow the Attestation Protocol verification process with two additionally verification steps. 
 
-The first step is to verify the integrity of a claim. At the point of signed data checking, one needs to extract the previously created claim embedded into the singed data payload, recreate the root hash (based on the claim user data and hashes), and compare it with the claims rootHash value.
+The first step is to verify the integrity of a claim. At the point of signed data checking, one needs to extract the previously created claim embedded into the singed data payload, recreate the root hash (based on the claim user data and leaf hashes), and compare it with the claim rootHash value.
 
-The second step needs to be embedded into the entity check process. One checks if the claim creator account contains the self-created root hash as payload, which proves that an attestor account attested the claim. If the Attestation Protocol verification process finally succeeds, the verifier can be sure that the claim creator account indeed signs the claim, the claim data are valid and attested by an entity which is itself attested by a trustworthy entity.
+The second step needs to be embedded into the entity check process. One checks if the claim creator account contains the self-created root hash as payload, which proves that an attestor account attested the claim. If the Attestation Protocol verification process finally succeeds, the verifier can be sure that the claim creator account indeed signed the claim, the claim data are valid and attested by an entity which is itself attested by a trustworthy entity.
