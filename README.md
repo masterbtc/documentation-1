@@ -1,8 +1,8 @@
-# Attestation Protocol
+# documentation
 
 
-Welcome to the Attestation Protocol documentation.
+Welcome to the documentation repository.
 
-This repository hosts the source files of the Attestation Protocol description. The description can be found in the [Wiki](https://github.com/blobaa/attestation-protocol/wiki/Attestation-Protocol) of this project.
+This repository hosts the source files for the **blo**ckchain-**ba**sed **a**uthentication documentation. You can find the documentation inside the [Wiki](https://github.com/blobaa/attestation-protocol/wiki/Attestation-Protocol) of this repository.
 
-A reference implementation can be found [here](https://github.com/blobaa/attestation-protocol-ts).
+Enjoy :)

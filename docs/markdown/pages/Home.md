@@ -17,8 +17,11 @@
  */ 
  -->
 
-
 Welcome to the documentation of the **blo**ckchain-**ba**sed **a**uthentication project.
+
+Feel free to contact me (a_aldemir@hotmail.de) or create issues if you have any suggestions, improvements, or ideas.
+
+Thanks for your interest :).
 
 # Modules
 
