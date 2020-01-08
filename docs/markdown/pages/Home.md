@@ -18,7 +18,7 @@
  -->
 
 
-Welcome to the documentation of the **blo**ckchain **ba**sed **a**uthentication project.
+Welcome to the documentation of the **blo**ckchain-**ba**sed **a**uthentication project.
 
 # Modules
 
