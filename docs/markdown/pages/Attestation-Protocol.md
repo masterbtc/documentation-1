@@ -18,6 +18,7 @@
  -->
 
 # Table of Contents
+
 - [Table of Contents](#table-of-contents)
 - [Protocol Version](#protocol-version)
 - [Introduction](#introduction)
@@ -33,7 +34,8 @@
 - [Self Attestation](#self-attestation)
 - [Attestation](#attestation)
 - [Data Signing](#data-signing)
-- [Data Verification](#data-verification)
+- [Verification](#verification)
+- [Expandability](#expandability)
 - [Future Work](#future-work)
     - [Document Signing](#document-signing)
     - [Entity Ranking](#entity-ranking)
@@ -207,11 +209,11 @@ To do so, the attested account holder creates a signature token based on the sig
 Even though the creatorAccount property isn't necessarily needed for verification (because the signature token already includes this information), it should nevertheless be part of a signed data object. The reason is human readability. One should be able to see the origin of signed data without needing to verify it.
  
 
-# Data Verification
+# Verification
 
 ![](./../../plantuml/out/attestation-protocol/protocol-verification-workflow/protocol-verification-workflow.svg)
 
-*signed data verification workflow*
+*verification workflow*
 
 Whenever a verifier receives a signed data object, one needs to proceed with the following steps successfully to verify the validity of these data.
 
@@ -251,6 +253,16 @@ Whenever a verifier receives a signed data object, one needs to proceed with the
 10. collect the data fields from the attestor account.
 11. treat attestor as an attested account.
 12. continue with step 6.
+
+
+# Expandability
+
+Because the payloads of attestations and signed data objects can be data of any kind, extensions could be build on top of the Attestation Protocol that live inside these payloads and extend the functionality of the protocol.
+
+
+![](./../../draw.io/out/diagrams-layers-overview.svg)
+
+*layers overview*
 
 
 # Future Work
