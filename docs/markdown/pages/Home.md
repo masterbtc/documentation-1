@@ -17,10 +17,10 @@
  */ 
  -->
 
+
+Welcome to the documentation of the **blo**ckchain **ba**sed **a**uthentication project.
+
 # Modules
-
-Welcome to the documentation.
-
 
 ## Attestation Protocol
 
