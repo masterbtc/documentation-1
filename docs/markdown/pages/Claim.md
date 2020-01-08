@@ -20,14 +20,14 @@
 # Table of Contents
 
 - [Table of Contents](#table-of-contents)
-    - [Introduction](#introduction)
-    - [Claim Elements](#claim-elements)
-        - [UserData](#userdata)
-        - [Hashes](#hashes)
-    - [Authentication Workflows](#authentication-workflows)
+- [Introduction](#introduction)
+- [Claim Elements](#claim-elements)
+    - [UserData](#userdata)
+    - [Hashes](#hashes)
+- [Authentication Workflows](#authentication-workflows)
 
 
-## Introduction
+# Introduction
 
 The Claim module, in conjunction with the Attestation Protocol, enables the possibility to create [verifiable claims](https://docs.microsoft.com/en-us/previous-versions/msp-n-p/ff359101(v=pandp.10)?redirectedfrom=MSDN). These claims are backed by trusted authorities and can be used to authenticate an entity to a third party.
 
@@ -38,7 +38,7 @@ A key benefit of only storing the fingerprint instead of the full data set is pr
 A claim based authentication system could be built on top of these two modules.
 
 
-## Claim Elements
+# Claim Elements
 
 A claim object, representing a claim, contains the following elements:
 
@@ -60,7 +60,7 @@ interface ClaimObject {
 ````
 
 
-### UserData
+## UserData
 
 The userData array contains the user data bundled in an object with the following properties:
 
@@ -75,7 +75,7 @@ The userData array contains the user data bundled in an object with the followin
 The **name** property contains the name of a user data. It can be a string of any kind. The **value** property contains the actual user data, and the **nonce** is needed for unique leaf hash generation.
 
 
-### Hashes
+## Hashes
 
 As described above, an entity/user should be able to create a claim with a subset of one's user data. To achieve this, a [hash tree](https://en.wikipedia.org/wiki/Merkle_tree) based on the user data is created and added to the claim.
 
@@ -158,7 +158,7 @@ The **root hash** property holds the claim representing root hash. It is the res
 ````
 
 
-## Authentication Workflows
+# Authentication Workflows
 
 There are three major steps for a claim based authentication mechanism: claim registration, claim creation, and claim verification.
 
