@@ -29,7 +29,7 @@
 
 ## Introduction
 
-The Claim module, in conjunction with the Attestation Protocol, enables the possibility to create [verifiable claims](https://docs.microsoft.com/en-us/previous-versions/msp-n-p/ff359101(v=pandp.10)?redirectedfrom=MSDN), backed by trusted authorities, to fully authenticate an entity to a third party. To do so, a trusted authority signs and stores a fingerprint (hash) of an entity related data set on the blockchain. A verifier can later use this fingerprint to verify the integrity and authenticity of a self-created authentication claim received in an authentication request. A key benefit of only storing the fingerprint instead of the full data set is privacy protection. This approach lets an entity share pieces of attested user data in a way that a verify can validate these pieces without needing to know the full data set.
+The Claim module, in conjunction with the Attestation Protocol, enables the possibility to create [verifiable claims](https://docs.microsoft.com/en-us/previous-versions/msp-n-p/ff359101(v=pandp.10)?redirectedfrom=MSDN), backed by trusted authorities, to authenticate an entity to a third party. To do so, a trusted authority signs and stores a fingerprint (hash) of an entity related data set on the blockchain. A verifier can later use this fingerprint to verify the integrity and authenticity of a self-created authentication claim received in an authentication request. A key benefit of only storing the fingerprint instead of the full data set is privacy protection. This approach lets an entity share pieces of attested user data in a way that a verify can validate these pieces without needing to know the full data set.
 
 A claim based authentication system could be built on top of these two modules.
 
@@ -58,7 +58,7 @@ interface ClaimObject {
 
 ### UserData
 
-The userData array contains the clear text user data. Each user data is bundled in an object with the following properties:
+The userData array contains the user data bundled in an object with the following properties:
 
 | Property |                    Description                    |
 |----------|:-------------------------------------------------:|
@@ -68,14 +68,14 @@ The userData array contains the clear text user data. Each user data is bundled 
 
 *user data object properties*
 
-the **name** property contains the name of a user data. It can be a string of any kind. The **value** property contains the actual user data. The **nonce** is needed for unique leaf hash generation.
+The **name** property contains the name of a user data. It can be a string of any kind. The **value** property contains the actual user data, and the **nonce** is needed for unique leaf hash generation.
 
 
 ### Hashes
 
 As described above, an entity/user should be able to create a claim with a subset of one's user data. To achieve this, a [hash tree](https://en.wikipedia.org/wiki/Merkle_tree) based on the user data is created and added to the claim.
 
-To prevent an attacker from recreating the root hash based on collected data, every user data is appended with a unique nonce. This leads to different root hashes even if two user data contain the same name and value.
+To prevent an attacker from recreating the root hash based on collected data, every user data bundle includes a unique nonce, which leads to different root hashes even if two user data contain the same name and value.
 
 A flat tree structure with an order of n and a depth of 2 should be used:
 
@@ -83,7 +83,7 @@ A flat tree structure with an order of n and a depth of 2 should be used:
 
 *hash tree based on user data with order n and depth 2*
 
-Whenever an entity wants to authenticate itself, it shares the requested user data subset in clear text along with the necessary hashes to recreate the hash tree. A verifier then recreates the hash tree and compares the root hashes to verify the integrity of the shared data.
+Whenever an entity wants to authenticate itself, it shares the requested user data subset along with the necessary hashes to recreate the hash tree. A verifier then recreates the hash tree and compares the root hashes to verify the integrity of the shared data.
 
 The hashes object bundles the necessary hashes to recreate the hash tree.
 
@@ -96,7 +96,7 @@ The hashes object bundles the necessary hashes to recreate the hash tree.
 
 The **leafHash** property holds the leaf hashes needed to recreate the root hash. A leaf hash is only included if the corresponding user data is not part of the user data array.
 
-To gain consistency  every property of a user data object is first sorted alphanumeric based on the property key. The values of these properties are then concatenated to a utf8 string and finally hashed with the sha256 hash function.
+To gain consistency, each property of a user data object is first sorted alphanumerically by property key. The values of these properties are then concatenated to a utf8 string and finally hashed with the sha256 hash function.
 
 ````typescript
 /* User data object */
@@ -124,7 +124,7 @@ To gain consistency  every property of a user data object is first sorted alphan
 ````
 
 
-The **root hash** property holds the claim representing root hash. It is also generated in a consistency way. After all leaf hashes are available, these hashes will be first, similar to the leaf hash creation, alphanumerically sorted and then concatenated. The resulting concatenation string is then hashed (sha256) and the resulting hash string represents the root hash.
+The **root hash** property holds the claim representing root hash. It is the result of a hash (sha256) generation based on all leaf hashes. To gain consistency, all leaf hashes are alphanumerically sorted and concatenated beforehand, too. The resulting utf8 string is then used for the root hash generation.
 
 ````typescript
 /* Leaf hash array */
@@ -156,19 +156,19 @@ The **root hash** property holds the claim representing root hash. It is also ge
 
 ## Authentication Workflows
 
-There are three major steps for a claim based authentication mechanism: claim registration, claim creation and claim verification.
+There are three major steps for a claim based authentication mechanism: claim registration, claim creation, and claim verification.
 
 ![](./../plantUml/out/claim/../../../../plantUml/out/claim/claim-authentication-workflow/claim-authentication-workflow.svg)
 
 *claim authentication workflows*
 
 
-The claim **registration process** registers a claim to an account in the way that an attestor attests an account with the claims root hash as payload. This ensures that a claim is created and / or verified by a trusted entity.
+The claim **registration process** registers a claim to an account. To do so, an attestor attests an account with a claim's root hash as payload. This mechanism ensures that a claim is verified by a trusted entity.
 
-An attested account holder can then **create** verifiable **claims** self sovereignly. To do so, one selects the necessary claim user data, creates the claim and signs it in the way described in the Attestation Protocol. The resulting data set (containing the previously created claim as payload) is a verifiable claim and ready to be shared with a verifier.
+An attested account holder can then **create** verifiable **claims** self sovereignly. To do so, one selects the necessary claim user data, creates the claim, and signs it in the way described in the Attestation Protocol. The resulting data set (containing the previously created claim as payload) is a verifiable claim and ready to be shared with a verifier.
 
 To **verify** a verifiable **claim**, one needs to follow the Attestation Protocol verification process with two additionally verification steps. 
 
-The first step is to verify the integrity of a claim. At the point of signed data checking, one needs to extract the previously created claim embedded into the singed data payload, recreate the root hash (based on the claim user data and hashes) and compare it with the claims rootHash value.
+The first step is to verify the integrity of a claim. At the point of signed data checking, one needs to extract the previously created claim embedded into the singed data payload, recreate the root hash (based on the claim user data and hashes), and compare it with the claims rootHash value.
 
-The second step needs to be embedded into the entity check process. One simply checks if the claim creator account contains the self-created root hash as payload, which proves that the claim is attested by an attestor account. If the Attestation Protocol verification process finally succeed, the verifier can be sure that the claim is indeed signed by the claim creator account, the claim data are valid and attested by an entity which is itself attested by a trustworthy entity.
+The second step needs to be embedded into the entity check process. One checks if the claim creator account contains the self-created root hash as payload, which proves that an attestor account attested the claim. If the Attestation Protocol verification process finally succeeds, the verifier can be sure that the claim creator account indeed signs the claim, the claim data are valid and attested by an entity which is itself attested by a trustworthy entity.
