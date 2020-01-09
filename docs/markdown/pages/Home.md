@@ -27,7 +27,7 @@ Thanks for your interest :).
 
 ## Attestation Protocol
 
-This is the core module of a blockchain based authentication system. It lets you create verifiable trust chains.
+This is the core module of a blockchain-based authentication system and lets you create verifiable trust chains.
 You can find the description at the [Attestation Protocol](https://github.com/blobaa/documentation/wiki/Attestation-Protocol) page and an implementation inside the [attestation-protocol-ts](https://github.com/blobaa/attestation-protocol-ts) repository.
 
 
