@@ -31,9 +31,9 @@
 
 The Claim module, in conjunction with the Attestation Protocol, enables the possibility to create [verifiable claims](https://docs.microsoft.com/en-us/previous-versions/msp-n-p/ff359101(v=pandp.10)?redirectedfrom=MSDN). These claims are backed by trusted authorities and can be used to authenticate an entity to a third party.
 
-A trusted authority signs and stores a fingerprint (hash) of an entity related data set on the blockchain. A verifier can later use this fingerprint to verify the integrity and authenticity of a self-created authentication claim received in an authentication request. 
+To do so, a trusted authority signs and stores a fingerprint (hash) of an entity related data set on the blockchain. A verifier can later use this fingerprint to verify the integrity and authenticity of a self-created authentication claim received.
 
-A key benefit of only storing the fingerprint instead of the full data set is privacy protection. This approach lets an entity share pieces of attested user data in a way that a verify can validate these pieces without needing to know the full data set.
+A key benefit of only storing the fingerprint instead of the full data set is privacy protection. This approach lets an entity share pieces of attested user data in a way that a verify can validate these pieces without knowing the full data set.
 
 A claim based authentication system could be built on top of these two modules.
 
@@ -79,7 +79,7 @@ The **name** property contains the name of a user data. It can be a string of an
 
 As described above, an entity/user should be able to create a claim with a subset of one's user data. To achieve this, a [hash tree](https://en.wikipedia.org/wiki/Merkle_tree) based on the user data is created and added to the claim.
 
-To prevent an attacker from recreating the root hash based on collected data, every user data bundle includes a unique nonce, which leads to different root hashes even if two user data contain the same name and value.
+To prevent an attacker from recreating the root hash based on collected data, every user data bundle includes a unique nonce. This nonce produces different root hashes even if two user data contain the same name and value.
 
 A flat tree structure with an order of n and a depth of 2 should be used:
 
@@ -167,9 +167,9 @@ There are three major steps for a claim based authentication mechanism: claim re
 *claim authentication workflows*
 
 
-The claim **registration process** registers a claim to an account. To do so, an attestor attests an account with a claim's root hash as payload. This mechanism ensures that a claim is verified by a trusted entity.
+The claim **registration process** registers a claim to an account. To do so, an attestor attests an account with the claim's root hash as payload. This ensures that a claim is verified by a trusted entity (the attestor).
 
-An attested account holder can then **create** verifiable **claims** self sovereignly. To do so, one selects the necessary claim user data, creates the claim, and signs it in the way described in the Attestation Protocol. The resulting data set (containing the claim as payload) is a verifiable claim and ready to be shared with a verifier.
+An attested account holder can then **create** verifiable **claims** self sovereignly. One selects the necessary claim user data, creates the claim, and signs it in the way described in the Attestation Protocol. The resulting data set (containing the claim as payload) is a verifiable claim and ready to be shared with a verifier.
 
 To **verify** a verifiable **claim**, one needs to follow the Attestation Protocol verification process with two additionally verification steps. 
 
