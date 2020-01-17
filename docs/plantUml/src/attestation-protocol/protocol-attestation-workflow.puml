@@ -29,7 +29,7 @@ participant "New Attested Account\n(ARDOR-\n3333-3333-3333-33333)" as NCLAI
 note right
     accountProperty: {
         property: ap://<attestation context>,
-        value: 001|<r or i>|a|0000-0000-0000-00000|<attestor account payload>
+        value: 200|<r or i>|a|0000-0000-0000-00000|<attestor account payload>
     }
 end note
 
@@ -41,7 +41,7 @@ ATTE -> CLAI: set account property
 note right
     accountProperty: {
         property: ap://<attestation context>,
-        value: 001|<i or l>|a|0000-0000-0000-00000|<account payload>
+        value: 200|<i or l>|a|0000-0000-0000-00000|<account payload>
     }
 end note
 |||
@@ -54,7 +54,7 @@ ATTE -> CLAI: set account property
 note right
     accountProperty: {
         property: ap://<attestation context>,
-        value: 001|<i or l>|i|0000-0000-0000-00000|<account payload>
+        value: 200|<i or l>|i|0000-0000-0000-00000|<account payload>
     }
 end note
 |||
@@ -67,7 +67,7 @@ ATTE -> CLAI: set account property
 note right
     accountProperty: {
         property: ap://<attestation context>,
-        value: 001|<i or l>|a|0000-0000-0000-00000|<account payload>
+        value: 200|<i or l>|a|0000-0000-0000-00000|<account payload>
     }
 end note
 |||
@@ -80,7 +80,7 @@ ATTE -> CLAI: set account property
 note right
     accountProperty: {
         property: ap://<attestation context>,
-        value: 001|<i or l>|a|0000-0000-0000-00000|<new account payload>
+        value: 200|<i or l>|a|0000-0000-0000-00000|<new account payload>
     }
 end note
 |||
@@ -93,7 +93,7 @@ ATTE -> NCLAI: set account property
 note right
     accountProperty: {
         property: ap://<attestation context>,
-        value: 001|<i or l>|a|0000-0000-0000-00000|<new account payload>
+        value: 200|<i or l>|a|0000-0000-0000-00000|<new account payload>
     }
 end note
 
@@ -102,7 +102,7 @@ ATTE -> CLAI: update account property
 note right
     accountProperty: {
         property: ap://<attestation context>,
-        value: 001|<i or l>|d|3333-3333-3333-33333|<new account payload>
+        value: 200|<i or l>|d|3333-3333-3333-33333|<new account payload>
     }
 end note
 |||

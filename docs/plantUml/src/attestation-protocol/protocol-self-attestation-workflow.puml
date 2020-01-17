@@ -28,7 +28,7 @@ ATTE -> ATTE: set account property
 note right
     accountProperty: {
         property: ap://<attestation context>,
-        value: 001|r|a|0000-0000-0000-00000|<account payload>
+        value: 200|r|a|0000-0000-0000-00000|<account payload>
     }
 end note
 |||
@@ -41,7 +41,7 @@ ATTE -> ATTE: update account property
 note right
     accountProperty: {
         property: myAttestationContext,
-        value: 001|r|i|0000-0000-0000-00000|<account payload>
+        value: 200|r|i|0000-0000-0000-00000|<account payload>
     }
 end note
 |||
@@ -54,7 +54,7 @@ ATTE -> ATTE: update account property
 note right
     accountProperty: {
         property: myAttestationContext,
-        value: 001|r|a|0000-0000-0000-00000|<account payload>
+        value: 200|r|a|0000-0000-0000-00000|<account payload>
     }
 end note
 |||
@@ -67,7 +67,7 @@ ATTE -> ATTE: update account property
 note right
     accountProperty: {
         property: ap://<attestation context>,
-        value: 001|r|a|0000-0000-0000-00000|<new account payload>
+        value: 200|r|a|0000-0000-0000-00000|<new account payload>
     }
 end note
 
@@ -79,7 +79,7 @@ ATTE -> NATTE: set account property
 note right
     accountProperty: {
         property: ap://<attestation context>,
-        value: 001|r|a|0000-0000-0000-00000|<new account payload>
+        value: 200|r|a|0000-0000-0000-00000|<new account payload>
     }
 end note
 
@@ -88,7 +88,7 @@ ATTE -> ATTE: update account property
 note right
     accountProperty: {
         property: ap://<attestation context>,
-        value: 001|r|d|2222-2222-2222-22222|<new account payload>
+        value: 200|r|d|2222-2222-2222-22222|<new account payload>
     }
 end note
 |||

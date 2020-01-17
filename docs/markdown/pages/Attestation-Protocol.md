@@ -39,7 +39,7 @@
 
 # Protocol Version
 
-current version: 1.0.0
+current version: 2.0.0
 
 
 # Introduction
@@ -88,7 +88,9 @@ All other fields are embedded into the 160 characters long *value* key/value pai
 
 ## Version
 
-The **Version** field points to the attestation protocol version. It is a three-digit number starting with 001 and needs to be incremented whenever a protocol update occurs. The current version number is 001.
+The **Version** field points to the Attestation Protocol version. It is a three character long string with a character range of *0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ* (similar to [Base62](https://www.wikidata.org/wiki/Q809817)). Each character represents the corresponding [semantic version](https://semver.org) field. 
+
+For example: String 200 points to the version 2.0.0 and 2aA to version 2.10.36
 
 
 ## Entity Type
@@ -166,7 +168,7 @@ The next sections describe the workflows to create, attest, update, delete, and 
 
 *self-attestation overview*
 
-First of all, there has to be a root account. A root account, as explained above, is a self-attested account and, therefore, must have a self-set account property. The property object contains the Attestation Context as *property* value and the concatenated data fields as *value* value. The Version variable is set to 001, as this indicates the first version of the Attestation Protocol. The entity type variable is set to the character 'r' and represents a root entity. The following 'a' character sets the root entity to active and therefore the redirecting account variable to the dummy value of '0000-0000-0000-00000'. The next 120 characters are assigned to the user payload.
+First of all, there has to be a root account. A root account, as explained above, is a self-attested account and, therefore, must have a self-set account property. The property object contains the Attestation Context as *property* value and the concatenated data fields as *value* value. The Version variable is set to 200, as this indicates the version of the Attestation Protocol. The entity type variable is set to the character 'r' and represents a root entity. The following 'a' character sets the root entity to active and therefore the redirecting account variable to the dummy value of '0000-0000-0000-00000'. The next 120 characters are assigned to the user payload.
 
 If a root account holder decides to deactivate one's account, one needs to update the state type character to 'i'. This account will then be treated falsy in the verification process. To revoke one's decision and reactivate the account, one needs to switch the state type character to 'a' again.
 
@@ -247,13 +249,3 @@ Whenever a verifier receives a signed data object, the following steps must be s
 10. collect the data fields from the attestor account.
 11. treat the attestor as an attested account.
 12. continue with step 6.
-
-
-<!-- # Expandability
-
-Because the payloads of attestations and signed data objects can be data of any kind, extensions could be build on top of the Attestation Protocol that live inside these payloads and extend the functionality of the protocol.
-
-
-![](./../../draw.io/out/diagrams-layers-overview.svg)
-
-*layers overview* -->
