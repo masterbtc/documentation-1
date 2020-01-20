@@ -25,11 +25,12 @@ participant "Verifier" as VERI
 ATTE -> ATTE: sign data
 note right
     signedData: {
-        payload: <data to be signed>
-        attestationContext: <attestation context>
-        attestationPath: [<attestor accounts up to root>]
-        creatorAccount: <data object creator account>
+        attestationContext: <attestation context>,
+        attestationPath: [<attestor accounts up to root>],
+        creatorAccount: <data object creator account>,
+        payload: <data to be signed>,
         signature: <signature token created by data object creator account>
+        version: <protocol version>
     }
 end note
 

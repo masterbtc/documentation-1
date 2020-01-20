@@ -30,7 +30,7 @@ participant "Attestor" as ATTE
 
 
 ...
-== Data Verification ==
+== Signed Data Verification ==
 
 VERI -> VERI: decode token
 VERI -> VERI: check validity of token
