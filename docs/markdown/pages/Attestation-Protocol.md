@@ -200,7 +200,7 @@ It should also be mentioned that there is the capability of self-sovereignty rev
 
 After a trust chain is built, an attested account holder is able to sign data. The authenticity of these data can later be verified without needing to participate in a trust chain in any way. Only the root account must be known and trusted.
 
-To do so, the attested account holder creates a signature token based on the signed data object properties. These properties consist of a payload (the actual data to be verified), the attestation context, the attestation path (which is the path from the attestor account up to the root account), and the attested account itself as creator account.
+To do so, the attested account holder creates a signature token based on the signed data object properties. These properties consist of the attestation context, the attestation path (which is the path from the attestor account up to the root account), the attested account as creator account, a payload (the actual data to be verified), and the version property to indicate the protocol version.
 
 Even though the creator account property is not necessarily needed for verification (because the signature token already includes this information), it should nevertheless be part of a signed data object. The reason is human readability. One should be able to see the origin of signed data without needing to go through the verification process.
  
